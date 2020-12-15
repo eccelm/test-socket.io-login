@@ -1,28 +1,39 @@
-import React, { Component } from "react";
+import React, { useState, useEffect } from "react";
 import "./App.css";
 import Title from "./Components/Title";
 import MessageList from "./Components/MessageList";
 import Login from "./Components/Login";
 import UserList from "./Components/UserList";
+import socketIOClient from "socket.io-client";
 
-/*
-Data:
-  - Username
-  - Status: online/offline
-*/
+const ENDPOINT = "http://127.0.0.1:4001";
 
-class App extends Component {
-  state = { username: "martha", avatar: "", status: "online", userList: [] };
-  render() {
-    return (
-      <div className="App">
-        <Title />
-        <Login />
-        <UserList />
-        {this.state.status === "online" ? <MessageList /> : <></>}
-      </div>
-    );
-  }
+
+
+function App() {
+
+  const [response, setResponse] = useState("");
+  const [username, setUsername] = useState("martha");
+  const [avatar, setAvatar] = useState("");
+  const [status, setStatus] = useState("online");
+  const [userList, setUserList] = seState([]);
+
+  useEffect(() => {
+    const socket = socketIOClient(ENDPOINT);
+    socket.on("FromAPI", data => {
+      setResponse(data);
+    })
+  }, []);
+
+  reur(
+    <div className="App">
+      <Title />
+      <Login />
+      <UserList />
+      {this.state.status === "online" ? <MessageList /> : <></>}
+    </div>
+  );
+
 }
 
 export default App;
